@@ -15,10 +15,10 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkNormalDistributionImageSource_hxx
-#define itkNormalDistributionImageSource_hxx
+#ifndef itkWaveletFourierStripeArtifactImageFilter_hxx
+#define itkWaveletFourierStripeArtifactImageFilter_hxx
 
-#include "itkNormalDistributionImageSource.h"
+#include "itkWaveletFourierStripeArtifactImageFilter.h"
 #include "itkNormalVariateGenerator.h"
 
 #include "itkImageScanlineIterator.h"
@@ -28,15 +28,15 @@ namespace itk
 {
 
 template< typename TImage >
-NormalDistributionImageSource< TImage >
-::NormalDistributionImageSource()
+WaveletFourierStripeArtifactImageFilter< TImage >
+::WaveletFourierStripeArtifactImageFilter()
 {
 }
 
 
 template< typename TImage >
 void
-NormalDistributionImageSource< TImage >
+WaveletFourierStripeArtifactImageFilter< TImage >
 ::PrintSelf( std::ostream& os, Indent indent ) const
 {
   Superclass::PrintSelf( os, indent );
@@ -45,38 +45,19 @@ NormalDistributionImageSource< TImage >
 
 template< typename TImage >
 void
-NormalDistributionImageSource< TImage >
-::ThreadedGenerateData( const OutputRegionType & outputRegion, ThreadIdType threadId )
+WaveletFourierStripeArtifactImageFilter< TImage >
+::GeneratData()
 {
+  typename ImageType::Pointer input = ImageType::New();
+  input->Graft( const_cast< ImageType * >( this->GetInput() ));
+
   ImageType * output = this->GetOutput();
 
-  typedef itk::Statistics::NormalVariateGenerator NormalGeneratorType;
-  NormalGeneratorType::Pointer normalGenerator = NormalGeneratorType::New();
-  normalGenerator->Initialize( 101 );
-
-  const SizeValueType size0 = outputRegion.GetSize( 0 );
-  if( size0 == 0 )
-    {
-    return;
-    }
-  const SizeValueType numberOfLinesToProcess = outputRegion.GetNumberOfPixels() / size0;
-
-  typedef ImageScanlineIterator< ImageType > IteratorType;
-  IteratorType it( output, outputRegion );
-  ProgressReporter progress( this, threadId, numberOfLinesToProcess );
-
-  while( !it.IsAtEnd() )
-    {
-    while( !it.IsAtEndOfLine() )
-      {
-      it.Set( normalGenerator->GetVariate() );
-      ++it;
-      }
-    it.NextLine();
-    progress.CompletedPixel();
-    }
+  //m_RescaleFilter->GraftOutput( this->GetOutput() );
+  //m_RescaleFilter->Update();
+  //this->GraftOutput( m_RescaleFilter->GetOutput() );
 }
 
 } // end namespace itk
 
-#endif // itkNormalDistributionImageSource_hxx
+#endif // itkWaveletFourierStripeArtifactImageFilter_hxx

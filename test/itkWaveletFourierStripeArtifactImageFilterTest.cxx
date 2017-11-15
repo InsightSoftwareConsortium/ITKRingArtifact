@@ -16,42 +16,41 @@
  *
  *=========================================================================*/
 
-#include "itkNormalDistributionImageSource.h"
+#include "itkWaveletFourierStripeArtifactImageFilter.h"
 
+#include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkTestingMacros.h"
 
-int itkNormalDistributionImageSourceTest( int argc, char * argv[] )
+int itkWaveletFourierStripeArtifactImageFilterTest( int argc, char * argv[] )
 {
-  if( argc < 2 )
+  if( argc < 3 )
     {
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " outputImage";
+    std::cerr << " inputImage outputImage";
     std::cerr << std::endl;
     return EXIT_FAILURE;
     }
-  const char * outputImageFileName  = argv[1];
+  const char * inputImageFileName = argv[1];
+  const char * outputImageFileName = argv[2];
 
   const unsigned int                         Dimension = 2;
   typedef float                              PixelType;
   typedef itk::Image< PixelType, Dimension > ImageType;
 
-  typedef itk::NormalDistributionImageSource< ImageType > DistributionSourceType;
-  DistributionSourceType::Pointer distributionSource = DistributionSourceType::New();
+  typedef itk::ImageFileReader< ImageType > ReaderType;
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName( inputImageFileName );
 
-  EXERCISE_BASIC_OBJECT_METHODS( distributionSource, NormalDistributionImageSource , GenerateImageSource );
+  typedef itk::WaveletFourierStripeArtifactImageFilter< ImageType > FilterType;
+  FilterType::Pointer filter = FilterType::New();
 
-
-  ImageType::SizeType size;
-  size.Fill( 128 );
-  distributionSource->SetSize( size );
-
-  std::cout << distributionSource << std::endl;
+  EXERCISE_BASIC_OBJECT_METHODS( filter, WaveletFourierStripeArtifactImageFilter , ImageToImageFilter );
 
   typedef itk::ImageFileWriter< ImageType > WriterType;
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName( outputImageFileName );
-  writer->SetInput( distributionSource->GetOutput() );
+  writer->SetInput( filter->GetOutput() );
   try
     {
     writer->Update();
