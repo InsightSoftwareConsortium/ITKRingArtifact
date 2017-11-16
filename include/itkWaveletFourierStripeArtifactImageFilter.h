@@ -39,7 +39,7 @@ namespace itk
  * reconstruction, or apply the filter to an image transformed with
  * itk::CartesianToPolarTransform after reconstruction.
  *
- * \ingroup StripeArtifact
+ * \ingroup RingArtifact
  */
 template< typename TImage >
 class WaveletFourierStripeArtifactImageFilter: public ImageToImageFilter< TImage, TImage >
