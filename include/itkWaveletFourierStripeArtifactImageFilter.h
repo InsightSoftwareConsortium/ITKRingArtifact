@@ -68,7 +68,7 @@ protected:
 
   void PrintSelf( std::ostream& os, Indent indent ) const ITK_OVERRIDE;
 
-  virtual void GeneratData() ITK_OVERRIDE;
+  virtual void GenerateData() ITK_OVERRIDE;
 
 private:
   ITK_DISALLOW_COPY_AND_ASSIGN(WaveletFourierStripeArtifactImageFilter);

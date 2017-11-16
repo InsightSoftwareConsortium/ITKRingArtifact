@@ -46,8 +46,10 @@ WaveletFourierStripeArtifactImageFilter< TImage >
 template< typename TImage >
 void
 WaveletFourierStripeArtifactImageFilter< TImage >
-::GeneratData()
+::GenerateData()
 {
+  this->AllocateOutputs();
+
   typename ImageType::Pointer input = ImageType::New();
   input->Graft( const_cast< ImageType * >( this->GetInput() ));
 

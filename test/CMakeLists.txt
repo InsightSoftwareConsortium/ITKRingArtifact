@@ -12,6 +12,6 @@ itk_add_test(NAME itkWaveletFourierStripeArtifactImageFilterTest
     #${ITK_TEST_OUTPUT_DIR}/itkNormalDistributionImageSourceTestOutput.mha
     #DATA{Baseline/itkNormalDistributionImageSourceTestOutput.mha}
   itkWaveletFourierStripeArtifactImageFilterTest
-    #DATA{Input/bone-ct-roi.nrrd}
-    #${ITK_TEST_OUTPUT_DIR}/itkNormalDistributionImageSourceTestOutput.mha
+    DATA{Input/bone-ct-polar.nrrd}
+    ${ITK_TEST_OUTPUT_DIR}/itkNormalDistributionImageSourceTestOutput.mha
   )

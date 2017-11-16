@@ -45,6 +45,8 @@ int itkWaveletFourierStripeArtifactImageFilterTest( int argc, char * argv[] )
   typedef itk::WaveletFourierStripeArtifactImageFilter< ImageType > FilterType;
   FilterType::Pointer filter = FilterType::New();
 
+  filter->SetInput( reader->GetOutput() );
+
   EXERCISE_BASIC_OBJECT_METHODS( filter, WaveletFourierStripeArtifactImageFilter , ImageToImageFilter );
 
   typedef itk::ImageFileWriter< ImageType > WriterType;
