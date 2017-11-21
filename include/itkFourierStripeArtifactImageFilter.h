@@ -15,24 +15,23 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkWaveletFourierStripeArtifactImageFilter_h
-#define itkWaveletFourierStripeArtifactImageFilter_h
+#ifndef itkFourierStripeArtifactImageFilter_h
+#define itkFourierStripeArtifactImageFilter_h
 
 #include "itkImageToImageFilter.h"
 
 namespace itk
 {
 
-/** \class WaveletFourierStripeArtifactImageFilter
+/** \class FourierStripeArtifactImageFilter
  *
  * \brief Filter out vertical stripe artifacts.
  *
- * This filter removes vertical stripe artifacts from the input image. It is
- * based off the algorithm:
+ * This filter removes vertical stripe artifacts from the input image.
  *
- * Münch, B; Trtik, P; Marone, F; Stampanoni, M (2009). Stripe and ring
- * artifact removal with combined
- * wavelet--Fourier filtering. Optics Express, 17(10):8567-8591.
+ * Stripes are removed in the direction specified with SetDirection by
+ * application of a Gaussian in the Fourier domain.To increase suppression of
+ * stripes not completely aligned with Direction, Increase the value of Sigma.
  *
  * To apply the filter for ring artifact removal from x-ray computed
  * tomography images, either apply the filter to the sinogram prior to
@@ -44,14 +43,14 @@ namespace itk
  * \ingroup RingArtifact
  */
 template< typename TImage >
-class WaveletFourierStripeArtifactImageFilter: public ImageToImageFilter< TImage, TImage >
+class FourierStripeArtifactImageFilter: public ImageToImageFilter< TImage, TImage >
 {
 public:
   typedef TImage                        ImageType;
   typedef typename ImageType::PixelType PixelType;
 
   /** Standard class typedefs. */
-  typedef WaveletFourierStripeArtifactImageFilter    Self;
+  typedef FourierStripeArtifactImageFilter           Self;
   typedef ImageToImageFilter< ImageType, ImageType > Superclass;
   typedef SmartPointer< Self >                       Pointer;
   typedef SmartPointer< const Self >                 ConstPointer;
@@ -59,21 +58,21 @@ public:
   itkStaticConstMacro( ImageDimension, unsigned int, ImageType::ImageDimension );
 
   /** Run-time type information. */
-  itkTypeMacro( WaveletFourierStripeArtifactImageFilter, ImageToImageFilter );
+  itkTypeMacro( FourierStripeArtifactImageFilter, ImageToImageFilter );
 
   /** Standard New macro. */
   itkNewMacro( Self );
 
 protected:
-  WaveletFourierStripeArtifactImageFilter();
-  virtual ~WaveletFourierStripeArtifactImageFilter() {}
+  FourierStripeArtifactImageFilter();
+  virtual ~FourierStripeArtifactImageFilter() {}
 
   void PrintSelf( std::ostream& os, Indent indent ) const ITK_OVERRIDE;
 
   virtual void GenerateData() ITK_OVERRIDE;
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(WaveletFourierStripeArtifactImageFilter);
+  ITK_DISALLOW_COPY_AND_ASSIGN(FourierStripeArtifactImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   itkConceptMacro( FloatingPointPixel, ( itk::Concept::IsFloatingPoint< typename ImageType::PixelType > ) );
@@ -82,7 +81,7 @@ private:
 }
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "itkWaveletFourierStripeArtifactImageFilter.hxx"
+#include "itkFourierStripeArtifactImageFilter.hxx"
 #endif
 
-#endif // itkWaveletFourierStripeArtifactImageFilter_h
+#endif // itkFourierStripeArtifactImageFilter_h

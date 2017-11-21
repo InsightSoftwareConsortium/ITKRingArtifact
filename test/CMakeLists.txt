@@ -1,6 +1,7 @@
 itk_module_test()
 
 set(RingArtifactTests
+  itkFourierStripeArtifactImageFilterTest.cxx
   itkWaveletFourierStripeArtifactImageFilterTest.cxx
   )
 
@@ -14,4 +15,14 @@ itk_add_test(NAME itkWaveletFourierStripeArtifactImageFilterTest
   itkWaveletFourierStripeArtifactImageFilterTest
     DATA{Input/bone-ct-polar.nrrd}
     ${ITK_TEST_OUTPUT_DIR}/itkNormalDistributionImageSourceTestOutput.mha
+  )
+
+itk_add_test(NAME itkFourierStripeArtifactImageFilterTest
+  COMMAND RingArtifactTestDriver
+  #--compare
+    #${ITK_TEST_OUTPUT_DIR}/itkNormalDistributionImageSourceTestOutput.mha
+    #DATA{Baseline/itkNormalDistributionImageSourceTestOutput.mha}
+  itkFourierStripeArtifactImageFilterTest
+    DATA{Input/bone-ct-polar.nrrd}
+    ${ITK_TEST_OUTPUT_DIR}/itkFourierStripeArtifactImageFilterTest.nrrd
   )
