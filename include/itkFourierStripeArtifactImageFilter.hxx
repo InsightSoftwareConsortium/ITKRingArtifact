@@ -31,6 +31,9 @@ template< typename TImage >
 FourierStripeArtifactImageFilter< TImage >
 ::FourierStripeArtifactImageFilter()
 {
+  this->m_ForwardFFTFilter = ForwardFFTFilterType::New();
+  this->m_InverseFFTFilter = InverseFFTFilterType::New();
+  this->m_ComplexImage = ComplexImageType::New();
 }
 
 
@@ -46,18 +49,47 @@ FourierStripeArtifactImageFilter< TImage >
 template< typename TImage >
 void
 FourierStripeArtifactImageFilter< TImage >
-::GenerateData()
+::BeforeThreadedGenerateData()
 {
-  this->AllocateOutputs();
-
   typename ImageType::Pointer input = ImageType::New();
-  input->Graft( const_cast< ImageType * >( this->GetInput() ));
+  input->Graft( const_cast< ImageType * >( this->GetInput() ) );
 
-  ImageType * output = this->GetOutput();
+  this->m_ForwardFFTFilter->SetInput( input );
+
+  this->m_ForwardFFTFilter->Update();
+  this->m_ComplexImage->Graft( this->m_ForwardFFTFilter->GetOutput() );
+}
+
+
+template< typename TImage >
+void
+FourierStripeArtifactImageFilter< TImage >
+::ThreadedGenerateData( const OutputRegionType & outputRegion, ThreadIdType threadId )
+{
+  //this->AllocateOutputs();
+
+  //typename ImageType::Pointer input = ImageType::New();
+  //input->Graft( const_cast< ImageType * >( this->GetInput() ));
+
+
+  //ImageType * output = this->GetOutput();
 
   //m_RescaleFilter->GraftOutput( this->GetOutput() );
   //m_RescaleFilter->Update();
   //this->GraftOutput( m_RescaleFilter->GetOutput() );
+}
+
+
+template< typename TImage >
+void
+FourierStripeArtifactImageFilter< TImage >
+::AfterThreadedGenerateData()
+{
+  this->m_InverseFFTFilter->GraftOutput( this->GetOutput() );
+
+  // todo: this->m_InverseFFTFilter->SetInput(
+
+  this->GraftOutput( this->m_InverseFFTFilter->GetOutput() );
 }
 
 } // end namespace itk

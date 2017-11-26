@@ -19,6 +19,8 @@
 #define itkFourierStripeArtifactImageFilter_h
 
 #include "itkImageToImageFilter.h"
+#include "itkForwardFFTImageFilter.h"
+#include "itkInverseFFTImageFilter.h"
 
 namespace itk
 {
@@ -69,10 +71,24 @@ protected:
 
   void PrintSelf( std::ostream& os, Indent indent ) const ITK_OVERRIDE;
 
-  virtual void GenerateData() ITK_OVERRIDE;
+  virtual void BeforeThreadedGenerateData() ITK_OVERRIDE;
+
+  typedef typename ImageType::RegionType OutputRegionType;
+  virtual void ThreadedGenerateData( const OutputRegionType & outputRegion, ThreadIdType threadId ) ITK_OVERRIDE;
+
+  virtual void AfterThreadedGenerateData() ITK_OVERRIDE;
 
 private:
   ITK_DISALLOW_COPY_AND_ASSIGN(FourierStripeArtifactImageFilter);
+
+  typedef ForwardFFTImageFilter< ImageType > ForwardFFTFilterType;
+  typename ForwardFFTFilterType::Pointer m_ForwardFFTFilter;
+
+  typedef typename ForwardFFTFilterType::OutputImageType ComplexImageType;
+  typename ComplexImageType::Pointer m_ComplexImage;
+
+  typedef InverseFFTImageFilter< ComplexImageType > InverseFFTFilterType;
+  typename InverseFFTFilterType::Pointer m_InverseFFTFilter;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   itkConceptMacro( FloatingPointPixel, ( itk::Concept::IsFloatingPoint< typename ImageType::PixelType > ) );

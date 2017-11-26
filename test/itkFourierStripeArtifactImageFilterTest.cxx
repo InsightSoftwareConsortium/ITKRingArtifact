@@ -21,6 +21,7 @@
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkTestingMacros.h"
+#include "itkFFTPadImageFilter.h"
 
 int itkFourierStripeArtifactImageFilterTest( int argc, char * argv[] )
 {
@@ -42,10 +43,14 @@ int itkFourierStripeArtifactImageFilterTest( int argc, char * argv[] )
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( inputImageFileName );
 
+  typedef itk::FFTPadImageFilter< ImageType > PadFilterType;
+  PadFilterType::Pointer padFilter = PadFilterType::New();
+  padFilter->SetInput( reader->GetOutput() );
+
   typedef itk::FourierStripeArtifactImageFilter< ImageType > FilterType;
   FilterType::Pointer filter = FilterType::New();
 
-  filter->SetInput( reader->GetOutput() );
+  filter->SetInput( padFilter->GetOutput() );
 
   EXERCISE_BASIC_OBJECT_METHODS( filter, FourierStripeArtifactImageFilter , ImageToImageFilter );
 
