@@ -20,6 +20,7 @@
 
 #include "itkFourierStripeArtifactImageFilter.h"
 #include "itkNormalVariateGenerator.h"
+#include "itkGaussianOperator.h"
 
 #include "itkImageScanlineIterator.h"
 #include "itkProgressReporter.h"
@@ -29,7 +30,8 @@ namespace itk
 
 template< typename TImage >
 FourierStripeArtifactImageFilter< TImage >
-::FourierStripeArtifactImageFilter()
+::FourierStripeArtifactImageFilter():
+  m_Direction( 0 )
 {
   this->m_ForwardFFTFilter = ForwardFFTFilterType::New();
   this->m_InverseFFTFilter = InverseFFTFilterType::New();
@@ -66,8 +68,11 @@ void
 FourierStripeArtifactImageFilter< TImage >
 ::ThreadedGenerateData( const OutputRegionType & outputRegion, ThreadIdType threadId )
 {
-  //this->AllocateOutputs();
+  typedef typename NumericTraits< typename ImageType::PixelType >::RealType RealType;
+  typedef GaussianOperator< RealType, ImageDimension > GaussianOperatorType;
 
+  GaussianOperatorType gaussianOperator;
+  gaussianOperator.SetDirection( this->GetDirection() );
   //typename ImageType::Pointer input = ImageType::New();
   //input->Graft( const_cast< ImageType * >( this->GetInput() ));
 

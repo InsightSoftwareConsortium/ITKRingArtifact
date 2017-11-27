@@ -65,6 +65,10 @@ public:
   /** Standard New macro. */
   itkNewMacro( Self );
 
+  /** Set the direction of the stripes. */
+  itkSetMacro( Direction, unsigned int );
+  itkGetConstMacro( Direction, unsigned int );
+
 protected:
   FourierStripeArtifactImageFilter();
   virtual ~FourierStripeArtifactImageFilter() {}
@@ -89,6 +93,8 @@ private:
 
   typedef InverseFFTImageFilter< ComplexImageType > InverseFFTFilterType;
   typename InverseFFTFilterType::Pointer m_InverseFFTFilter;
+
+  unsigned int m_Direction;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   itkConceptMacro( FloatingPointPixel, ( itk::Concept::IsFloatingPoint< typename ImageType::PixelType > ) );
