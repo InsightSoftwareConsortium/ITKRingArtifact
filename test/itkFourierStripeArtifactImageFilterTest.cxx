@@ -54,7 +54,12 @@ int itkFourierStripeArtifactImageFilterTest( int argc, char * argv[] )
 
   EXERCISE_BASIC_OBJECT_METHODS( filter, FourierStripeArtifactImageFilter , ImageToImageFilter );
 
-  TEST_SET_GET_VALUE( 0, filter->GetDirection() );
+  const unsigned int direction = 0;
+  filter->SetDirection( direction );
+  TEST_SET_GET_VALUE( direction, filter->GetDirection() );
+  const double sigma = 1.5;
+  filter->SetSigma( sigma );
+  TEST_SET_GET_VALUE( sigma, filter->GetSigma() );
 
   typedef itk::ImageFileWriter< ImageType > WriterType;
   WriterType::Pointer writer = WriterType::New();

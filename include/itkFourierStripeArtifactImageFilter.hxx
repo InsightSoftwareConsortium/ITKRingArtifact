@@ -21,6 +21,7 @@
 #include "itkFourierStripeArtifactImageFilter.h"
 #include "itkNormalVariateGenerator.h"
 #include "itkGaussianOperator.h"
+#include "itkImageLinearIteratorWithIndex.h"
 
 #include "itkImageScanlineIterator.h"
 #include "itkProgressReporter.h"
@@ -32,6 +33,7 @@ template< typename TImage >
 FourierStripeArtifactImageFilter< TImage >
 ::FourierStripeArtifactImageFilter():
   m_Direction( 0 ),
+  m_Sigma( 1.0 ),
   m_ImageRegionSplitter( ImageRegionSplitterDirection::New() )
 {
   this->m_ForwardFFTFilter = ForwardFFTFilterType::New();
@@ -80,20 +82,61 @@ void
 FourierStripeArtifactImageFilter< TImage >
 ::ThreadedGenerateData( const OutputRegionType & outputRegion, ThreadIdType threadId )
 {
-  typedef typename NumericTraits< typename ImageType::PixelType >::RealType RealType;
-  typedef GaussianOperator< RealType, ImageDimension > GaussianOperatorType;
+  typedef typename NumericTraits< typename ImageType::PixelType >::FloatType FloatType;
+  typedef GaussianOperator< FloatType, ImageDimension > GaussianOperatorType;
+
+  const unsigned int direction = this->GetDirection();
 
   GaussianOperatorType gaussianOperator;
-  gaussianOperator.SetDirection( this->GetDirection() );
-  //typename ImageType::Pointer input = ImageType::New();
-  //input->Graft( const_cast< ImageType * >( this->GetInput() ));
+  gaussianOperator.SetDirection( direction );
+  gaussianOperator.SetVariance( this->GetSigma() * this->GetSigma() );
+  gaussianOperator.SetMaximumError( 0.01 );
+  gaussianOperator.SetMaximumKernelWidth( outputRegion.GetSize()[direction] );
+  gaussianOperator.CreateDirectional();
 
+  ImageLinearIteratorWithIndex< ComplexImageType > complexIt( this->m_ComplexImage, outputRegion );
+  complexIt.SetDirection( direction );
 
-  //ImageType * output = this->GetOutput();
+  typedef std::vector< FloatType > CoefficientVectorType;
+  const size_t gaussianRadius = gaussianOperator.GetRadius( direction );
+  const size_t gaussianSize = gaussianOperator.GetSize( direction );
+  const size_t gaussianRightSize = gaussianRadius + 1;
+  CoefficientVectorType gaussianRight( gaussianRightSize );
+  const FloatType deNormalizer = 1.0 / gaussianOperator[gaussianRadius];
 
-  //m_RescaleFilter->GraftOutput( this->GetOutput() );
-  //m_RescaleFilter->Update();
-  //this->GraftOutput( m_RescaleFilter->GetOutput() );
+  for( size_t ii = gaussianRadius; ii < gaussianSize; ++ii )
+    {
+    gaussianRight[ii - gaussianRadius] = 1.0 - gaussianOperator[ii] * deNormalizer;
+    }
+  complexIt.GoToBegin();
+  while( !complexIt.IsAtEnd() )
+    {
+    for( size_t ii = 0; ii < gaussianRightSize; ++ii )
+      {
+      complexIt.Set( complexIt.Get() * gaussianRight[ii] );
+      ++complexIt;
+      }
+    complexIt.NextLine();
+    }
+
+  const size_t gaussianLeftSize = gaussianRadius;
+  CoefficientVectorType gaussianLeft( gaussianLeftSize );
+  for( size_t ii = 0; ii < gaussianLeftSize; ++ii )
+    {
+    gaussianLeft[gaussianLeftSize - 1 - ii] = 1.0 - gaussianOperator[ii] * deNormalizer;
+    }
+
+  complexIt.GoToBegin();
+  while( !complexIt.IsAtEnd() )
+    {
+    complexIt.GoToReverseBeginOfLine();
+    for( size_t ii = 0; ii < gaussianLeftSize; ++ii )
+      {
+      complexIt.Set( complexIt.Get() * gaussianLeft[ii] );
+      --complexIt;
+      }
+    complexIt.NextLine();
+    }
 }
 
 
@@ -104,7 +147,8 @@ FourierStripeArtifactImageFilter< TImage >
 {
   this->m_InverseFFTFilter->GraftOutput( this->GetOutput() );
 
-  // todo: this->m_InverseFFTFilter->SetInput(
+  this->m_InverseFFTFilter->SetInput( this->m_ComplexImage );
+  this->m_InverseFFTFilter->Update();
 
   this->GraftOutput( this->m_InverseFFTFilter->GetOutput() );
 }
