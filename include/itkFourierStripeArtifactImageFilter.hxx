@@ -31,7 +31,8 @@ namespace itk
 template< typename TImage >
 FourierStripeArtifactImageFilter< TImage >
 ::FourierStripeArtifactImageFilter():
-  m_Direction( 0 )
+  m_Direction( 0 ),
+  m_ImageRegionSplitter( ImageRegionSplitterDirection::New() )
 {
   this->m_ForwardFFTFilter = ForwardFFTFilterType::New();
   this->m_InverseFFTFilter = InverseFFTFilterType::New();
@@ -49,10 +50,21 @@ FourierStripeArtifactImageFilter< TImage >
 
 
 template< typename TImage >
+const ImageRegionSplitterBase*
+FourierStripeArtifactImageFilter< TImage >
+::GetImageRegionSplitter() const
+{
+  return this->m_ImageRegionSplitter;
+}
+
+
+template< typename TImage >
 void
 FourierStripeArtifactImageFilter< TImage >
 ::BeforeThreadedGenerateData()
 {
+  this->m_ImageRegionSplitter->SetDirection( this->GetDirection() );
+
   typename ImageType::Pointer input = ImageType::New();
   input->Graft( const_cast< ImageType * >( this->GetInput() ) );
 

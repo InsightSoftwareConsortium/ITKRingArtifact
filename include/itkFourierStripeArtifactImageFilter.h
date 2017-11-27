@@ -21,6 +21,7 @@
 #include "itkImageToImageFilter.h"
 #include "itkForwardFFTImageFilter.h"
 #include "itkInverseFFTImageFilter.h"
+#include "itkImageRegionSplitterDirection.h"
 
 namespace itk
 {
@@ -69,6 +70,11 @@ public:
   itkSetMacro( Direction, unsigned int );
   itkGetConstMacro( Direction, unsigned int );
 
+  /** Standard deviation of the Gaussian used to remove the stripes in the
+   * frequency domain along Direction. */
+  itkSetMacro( Sigma, double );
+  itkGetConstMacro( Sigma, double );
+
 protected:
   FourierStripeArtifactImageFilter();
   virtual ~FourierStripeArtifactImageFilter() {}
@@ -81,6 +87,8 @@ protected:
   virtual void ThreadedGenerateData( const OutputRegionType & outputRegion, ThreadIdType threadId ) ITK_OVERRIDE;
 
   virtual void AfterThreadedGenerateData() ITK_OVERRIDE;
+
+  virtual const ImageRegionSplitterBase* GetImageRegionSplitter() const ITK_OVERRIDE;
 
 private:
   ITK_DISALLOW_COPY_AND_ASSIGN(FourierStripeArtifactImageFilter);
@@ -95,6 +103,9 @@ private:
   typename InverseFFTFilterType::Pointer m_InverseFFTFilter;
 
   unsigned int m_Direction;
+  double       m_Sigma;
+
+  ImageRegionSplitterDirection::Pointer m_ImageRegionSplitter;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   itkConceptMacro( FloatingPointPixel, ( itk::Concept::IsFloatingPoint< typename ImageType::PixelType > ) );
