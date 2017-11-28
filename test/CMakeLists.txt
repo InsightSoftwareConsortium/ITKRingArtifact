@@ -19,9 +19,9 @@ itk_add_test(NAME itkWaveletFourierStripeArtifactImageFilterTest
 
 itk_add_test(NAME itkFourierStripeArtifactImageFilterTest
   COMMAND RingArtifactTestDriver
-  #--compare
-    #${ITK_TEST_OUTPUT_DIR}/itkNormalDistributionImageSourceTestOutput.mha
-    #DATA{Baseline/itkNormalDistributionImageSourceTestOutput.mha}
+  --compare
+    ${ITK_TEST_OUTPUT_DIR}/itkFourierStripeArtifactImageFilterTest.nrrd
+    DATA{Baseline/itkFourierStripeArtifactImageFilterTest.nrrd}
   itkFourierStripeArtifactImageFilterTest
     DATA{Input/bone-ct-polar.nrrd}
     ${ITK_TEST_OUTPUT_DIR}/itkFourierStripeArtifactImageFilterTest.nrrd
