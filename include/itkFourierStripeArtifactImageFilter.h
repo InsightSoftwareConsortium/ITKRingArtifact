@@ -75,6 +75,12 @@ public:
   itkSetMacro( Sigma, double );
   itkGetConstMacro( Sigma, double );
 
+  /** Fractional start frequency in the range [0.0, 1.0) to start filtering.
+   * Frequencies below this value are not filtered. Set to a high value to
+   * filter when only thin stripes are expected. */
+  itkSetMacro( StartFrequency, double );
+  itkGetConstMacro( StartFrequency, double );
+
 protected:
   FourierStripeArtifactImageFilter();
   virtual ~FourierStripeArtifactImageFilter() {}
@@ -104,6 +110,7 @@ private:
 
   unsigned int m_Direction;
   double       m_Sigma;
+  double       m_StartFrequency;
 
   ImageRegionSplitterDirection::Pointer m_ImageRegionSplitter;
 

@@ -57,9 +57,12 @@ int itkFourierStripeArtifactImageFilterTest( int argc, char * argv[] )
   const unsigned int direction = 0;
   filter->SetDirection( direction );
   TEST_SET_GET_VALUE( direction, filter->GetDirection() );
-  const double sigma = 1.5;
+  const double sigma = 3.0;
   filter->SetSigma( sigma );
   TEST_SET_GET_VALUE( sigma, filter->GetSigma() );
+  const double startFrequency = 0.05;
+  filter->SetStartFrequency( startFrequency );
+  TEST_SET_GET_VALUE( startFrequency, filter->GetStartFrequency() );
 
   typedef itk::ImageFileWriter< ImageType > WriterType;
   WriterType::Pointer writer = WriterType::New();

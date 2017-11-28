@@ -34,6 +34,7 @@ FourierStripeArtifactImageFilter< TImage >
 ::FourierStripeArtifactImageFilter():
   m_Direction( 0 ),
   m_Sigma( 1.0 ),
+  m_StartFrequency( 0.1 ),
   m_ImageRegionSplitter( ImageRegionSplitterDirection::New() )
 {
   this->m_ForwardFFTFilter = ForwardFFTFilterType::New();
@@ -94,7 +95,31 @@ FourierStripeArtifactImageFilter< TImage >
   gaussianOperator.SetMaximumKernelWidth( outputRegion.GetSize()[direction] );
   gaussianOperator.CreateDirectional();
 
-  ImageLinearIteratorWithIndex< ComplexImageType > complexIt( this->m_ComplexImage, outputRegion );
+  const ImageType * input = this->GetInput();
+  OutputRegionType cropRegion;
+  typename ImageType::IndexType startIndex( input->GetLargestPossibleRegion().GetIndex() );
+  typename ImageType::SizeType filterSize( input->GetLargestPossibleRegion().GetSize() );
+  for( unsigned int dimension = 0; dimension < ImageDimension; ++dimension )
+    {
+    if( dimension == direction )
+      {
+      continue;
+      }
+    const SizeValueType dimensionSize = input->GetLargestPossibleRegion().GetSize()[dimension];
+    const SizeValueType frequenciesCount = static_cast< SizeValueType >( dimensionSize * ( 1.0 - this->GetStartFrequency() ));
+    startIndex[dimension] = startIndex[dimension] + static_cast< IndexValueType >( dimensionSize / 2 * this->GetStartFrequency() );
+    filterSize[dimension] = frequenciesCount;
+    }
+  cropRegion.SetIndex( startIndex );
+  cropRegion.SetSize( filterSize );
+
+  OutputRegionType filterRegion( outputRegion );
+  if( !filterRegion.Crop( cropRegion ) )
+    {
+    return;
+    }
+
+  ImageLinearIteratorWithIndex< ComplexImageType > complexIt( this->m_ComplexImage, filterRegion );
   complexIt.SetDirection( direction );
 
   typedef std::vector< FloatType > CoefficientVectorType;
