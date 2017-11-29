@@ -1,5 +1,8 @@
 sudo: true
 language: cpp
+env:
+  global:
+    - secure: "16dU/kvAT5loscVzwICIbSqxTEzigoYevmu5DJIqSAW66R3tKi+TlMPV7gPPeEXrMom5kcJyIR8AHrT9oHEfqmhyJcGwbog5SAQS3a4bo2BxoQAwZ72ULOKupJzAZ6USHdNFzza+ePKttdvJ1HQN1K8eUvH6icPHpoi2tHJ/zenLLU3XavVhBgGJPckIoNA1wODqwwc3gEd8p2+YLYS/d6Qrh3X98ZBsVhnbHh8otr+1mLdmJwqyM5DJFbLFZjfnhZkYTzlrVeqcxchhGuxLq8kACX7ZUM6vLAbTzZJaZVaVZym9x1gD+JqmYPT1r4Ux00UvlfkhkeIPkCQLRrhEq/iNphd/iZr08zkYkV4Av8AAg3Sb6IP0kn2SfDDsuBJ9UA5ejZWHqSddVoZ7KQKhNTqh9zmFx3qA2axk1ri0yaJzMs34sqixkO8tcyp7oFUr3LW048WFx3VazC6Fjn2rFtwKjuf+8am9lzGtbV1e+93WMqFzXEpy+J99plq1qprcu3JrXZ69aTYVmwp2B9kajy5M7Av6EabneD2dW4tjdlwPQilBt+xx//v8ogvhmcSkX/vZQitS31Nty30pjpqH1GNQUc/G7yVy3xSialTQ+BfGizK/BOaocnUQoz2IFTx+LmOQHdzlaxQrP1y/cjA+5/4M8e7rblbZE7gWrwp2Xi4="
 os:
 - osx
 compiler:
@@ -7,9 +10,20 @@ compiler:
 cache:
   directories:
     - "$HOME/Library/Caches/Homebrew"
+install:
+ - wget https://raw.githubusercontent.com/scikit-build/scikit-ci-addons/master/travis/enable-worker-remote-access.sh -O ../enable-worker-remote-access.sh
+ - chmod u+x ../enable-worker-remote-access.sh
 script:
+- curl -O https://gist.github.com/thewtex/92ab638a8c8e388538667b281476767e/raw/f7ddc5154884a26105e30b26bcba3404e29506b5/itkFourierStripeArtifactImageFilterPython.py
+- otool --version
+- otool -L ./itkFourierStripeArtifactImageFilterPython.py
 - curl -L https://rawgit.com/InsightSoftwareConsortium/ITKPythonPackage/master/scripts/macpython-download-cache-and-build-module-wheels.sh -O
 - chmod u+x macpython-download-cache-and-build-module-wheels.sh
 - ./macpython-download-cache-and-build-module-wheels.sh
 - tar -zcvf dist.tar.gz dist/
 - curl -F file="@dist.tar.gz" https://filebin.ca/upload.php
+after_success:
+ - ../enable-worker-remote-access.sh
+
+after_failure:
+ - ../enable-worker-remote-access.sh
