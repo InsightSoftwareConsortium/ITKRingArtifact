@@ -13,13 +13,13 @@ except ImportError:
 
 setup(
     name='itk-ringartifact',
-    version='0.1.0',
+    version='0.1.1',
     author='Insight Software Consortium',
     author_email='itk+community@discourse.itk.org',
     packages=['itk'],
     package_dir={'itk': 'itk'},
     download_url=r'https://github.com/InsightSoftwareConsortium/ITKRingArtifact',
-    description=r'ITK filters to reduce ring artifacts common in x-ray computed tomography.',
+    description=r'ITK filters to reduce stripe artifacts or ring artifacts common in x-ray computed tomography, focused ion beam images, etc.',
     long_description='ITK is an open-source, cross-platform library that provides developers with an extensive suite of software tools for image analysis. Developed through extreme programming methodologies, ITK employs leading-edge algorithms for registering and segmenting multidimensional scientific images.',
     classifiers=[
         "License :: OSI Approved :: Apache Software License",
