@@ -85,16 +85,16 @@ protected:
   FourierStripeArtifactImageFilter();
   virtual ~FourierStripeArtifactImageFilter() {}
 
-  void PrintSelf( std::ostream& os, Indent indent ) const ITK_OVERRIDE;
+  void PrintSelf( std::ostream& os, Indent indent ) const override;
 
-  virtual void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   typedef typename ImageType::RegionType OutputRegionType;
-  virtual void ThreadedGenerateData( const OutputRegionType & outputRegion, ThreadIdType threadId ) ITK_OVERRIDE;
+  void ThreadedGenerateData( const OutputRegionType & outputRegion, ThreadIdType threadId ) override;
 
-  virtual void AfterThreadedGenerateData() ITK_OVERRIDE;
+  void AfterThreadedGenerateData() override;
 
-  virtual const ImageRegionSplitterBase* GetImageRegionSplitter() const ITK_OVERRIDE;
+  const ImageRegionSplitterBase* GetImageRegionSplitter() const override;
 
 private:
   ITK_DISALLOW_COPY_AND_ASSIGN(FourierStripeArtifactImageFilter);
