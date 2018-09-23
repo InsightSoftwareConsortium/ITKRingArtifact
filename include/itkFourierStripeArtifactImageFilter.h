@@ -90,7 +90,7 @@ protected:
   void BeforeThreadedGenerateData() override;
 
   typedef typename ImageType::RegionType OutputRegionType;
-  void ThreadedGenerateData( const OutputRegionType & outputRegion, ThreadIdType threadId ) override;
+  void DynamicThreadedGenerateData( const OutputRegionType & outputRegion ) override;
 
   void AfterThreadedGenerateData() override;
 

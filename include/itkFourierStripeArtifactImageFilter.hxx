@@ -81,7 +81,7 @@ FourierStripeArtifactImageFilter< TImage >
 template< typename TImage >
 void
 FourierStripeArtifactImageFilter< TImage >
-::ThreadedGenerateData( const OutputRegionType & outputRegion, ThreadIdType threadId )
+::DynamicThreadedGenerateData( const OutputRegionType & outputRegion )
 {
   typedef typename NumericTraits< typename ImageType::PixelType >::FloatType FloatType;
   typedef GaussianOperator< FloatType, ImageDimension > GaussianOperatorType;
