@@ -83,8 +83,8 @@ void
 FourierStripeArtifactImageFilter< TImage >
 ::DynamicThreadedGenerateData( const OutputRegionType & outputRegion )
 {
-  typedef typename NumericTraits< typename ImageType::PixelType >::FloatType FloatType;
-  typedef GaussianOperator< FloatType, ImageDimension > GaussianOperatorType;
+  using FloatType = typename NumericTraits< typename ImageType::PixelType >::FloatType;
+  using GaussianOperatorType = GaussianOperator< FloatType, ImageDimension >;
 
   const unsigned int direction = this->GetDirection();
 
@@ -122,7 +122,7 @@ FourierStripeArtifactImageFilter< TImage >
   ImageLinearIteratorWithIndex< ComplexImageType > complexIt( this->m_ComplexImage, filterRegion );
   complexIt.SetDirection( direction );
 
-  typedef std::vector< FloatType > CoefficientVectorType;
+  using CoefficientVectorType = std::vector< FloatType >;
   const size_t gaussianRadius = gaussianOperator.GetRadius( direction );
   const size_t gaussianSize = gaussianOperator.GetSize( direction );
   const size_t gaussianRightSize = gaussianRadius + 1;

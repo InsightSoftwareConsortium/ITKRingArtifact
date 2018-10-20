@@ -49,14 +49,14 @@ template< typename TImage >
 class FourierStripeArtifactImageFilter: public ImageToImageFilter< TImage, TImage >
 {
 public:
-  typedef TImage                        ImageType;
-  typedef typename ImageType::PixelType PixelType;
+  using ImageType = TImage;
+  using PixelType = typename ImageType::PixelType;
 
-  /** Standard class typedefs. */
-  typedef FourierStripeArtifactImageFilter           Self;
-  typedef ImageToImageFilter< ImageType, ImageType > Superclass;
-  typedef SmartPointer< Self >                       Pointer;
-  typedef SmartPointer< const Self >                 ConstPointer;
+  /** Standard class type alias. */
+  using Self = FourierStripeArtifactImageFilter;
+  using Superclass = ImageToImageFilter< ImageType, ImageType >;
+  using Pointer = SmartPointer< Self >;
+  using ConstPointer = SmartPointer< const Self >;
 
   itkStaticConstMacro( ImageDimension, unsigned int, ImageType::ImageDimension );
 
@@ -89,7 +89,7 @@ protected:
 
   void BeforeThreadedGenerateData() override;
 
-  typedef typename ImageType::RegionType OutputRegionType;
+  using OutputRegionType = typename ImageType::RegionType;
   void DynamicThreadedGenerateData( const OutputRegionType & outputRegion ) override;
 
   void AfterThreadedGenerateData() override;
@@ -99,13 +99,13 @@ protected:
 private:
   ITK_DISALLOW_COPY_AND_ASSIGN(FourierStripeArtifactImageFilter);
 
-  typedef ForwardFFTImageFilter< ImageType > ForwardFFTFilterType;
+  using ForwardFFTFilterType = ForwardFFTImageFilter< ImageType >;
   typename ForwardFFTFilterType::Pointer m_ForwardFFTFilter;
 
-  typedef typename ForwardFFTFilterType::OutputImageType ComplexImageType;
+  using ComplexImageType = typename ForwardFFTFilterType::OutputImageType;
   typename ComplexImageType::Pointer m_ComplexImage;
 
-  typedef InverseFFTImageFilter< ComplexImageType > InverseFFTFilterType;
+  using InverseFFTFilterType = InverseFFTImageFilter< ComplexImageType >;
   typename InverseFFTFilterType::Pointer m_InverseFFTFilter;
 
   unsigned int m_Direction;
