@@ -36,18 +36,18 @@ int itkFourierStripeArtifactImageFilterTest( int argc, char * argv[] )
   const char * outputImageFileName = argv[2];
 
   const unsigned int                         Dimension = 2;
-  typedef float                              PixelType;
-  typedef itk::Image< PixelType, Dimension > ImageType;
+  using PixelType = float;
+  using ImageType = itk::Image< PixelType, Dimension >;
 
-  typedef itk::ImageFileReader< ImageType > ReaderType;
+  using ReaderType = itk::ImageFileReader< ImageType >;
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( inputImageFileName );
 
-  typedef itk::FFTPadImageFilter< ImageType > PadFilterType;
+  using PadFilterType = itk::FFTPadImageFilter< ImageType >;
   PadFilterType::Pointer padFilter = PadFilterType::New();
   padFilter->SetInput( reader->GetOutput() );
 
-  typedef itk::FourierStripeArtifactImageFilter< ImageType > FilterType;
+  using FilterType = itk::FourierStripeArtifactImageFilter< ImageType >;
   FilterType::Pointer filter = FilterType::New();
 
   filter->SetInput( padFilter->GetOutput() );
@@ -64,7 +64,7 @@ int itkFourierStripeArtifactImageFilterTest( int argc, char * argv[] )
   filter->SetStartFrequency( startFrequency );
   TEST_SET_GET_VALUE( startFrequency, filter->GetStartFrequency() );
 
-  typedef itk::ImageFileWriter< ImageType > WriterType;
+  using WriterType = itk::ImageFileWriter< ImageType >;
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName( outputImageFileName );
   writer->SetInput( filter->GetOutput() );
