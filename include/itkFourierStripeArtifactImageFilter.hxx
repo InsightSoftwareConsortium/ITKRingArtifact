@@ -83,7 +83,7 @@ void
 FourierStripeArtifactImageFilter< TImage >
 ::DynamicThreadedGenerateData( const OutputRegionType & outputRegion )
 {
-  using FloatType = typename NumericTraits< typename ImageType::PixelType >::FloatType;
+  using FloatType = typename NumericTraits< typename ComplexImageType::PixelType >::ValueType;
   using GaussianOperatorType = GaussianOperator< FloatType, ImageDimension >;
 
   const unsigned int direction = this->GetDirection();
