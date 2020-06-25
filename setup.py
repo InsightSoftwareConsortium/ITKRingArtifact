@@ -13,7 +13,7 @@ except ImportError:
 
 setup(
     name='itk-ringartifact',
-    version='0.1.2',
+    version='1.0.0',
     author='Insight Software Consortium',
     author_email='itk+community@discourse.itk.org',
     packages=['itk'],
@@ -44,6 +44,6 @@ setup(
     keywords='ITK InsightToolkit',
     url=r'https://itk.org/',
     install_requires=[
-        r'itk>=5.0b01'
+        r'itk>=5.1.0.post3'
     ]
     )

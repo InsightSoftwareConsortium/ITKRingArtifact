@@ -1,21 +1,15 @@
 ITKRingArtifact
 ===============
 
-.. |CircleCI| image:: https://circleci.com/gh/InsightSoftwareConsortium/ITKRingArtifact.svg?style=shield
-    :target: https://circleci.com/gh/InsightSoftwareConsortium/ITKRingArtifact
+.. image:: https://github.com/InsightSoftwareConsortium/ITKRingArtifact/workflows/Build,%20test,%20package/badge.svg
 
-.. |TravisCI| image:: https://travis-ci.org/InsightSoftwareConsortium/ITKRingArtifact.svg?branch=master
-    :target: https://travis-ci.org/InsightSoftwareConsortium/ITKRingArtifact
+.. image:: https://img.shields.io/pypi/v/itk-ringartifact.svg
+    :target: https://pypi.python.org/pypi/itk-ringartifact
+    :alt: PyPI
 
-.. |AppVeyor| image:: https://img.shields.io/appveyor/ci/itkrobot/itkringartifact.svg
-    :target: https://ci.appveyor.com/project/itkrobot/itkringartifact
-
-=========== =========== ===========
-   Linux      macOS       Windows
-=========== =========== ===========
-|CircleCI|  |TravisCI|  |AppVeyor|
-=========== =========== ===========
-
+.. image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
+    :target: https://github.com/InsightSoftwareConsortium/ITKRingArtifact/blob/master/LICENSE)
+    :alt: License
 
 Overview
 --------

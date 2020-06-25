@@ -1,6 +1,6 @@
 /*=========================================================================
  *
- *  Copyright Insight Software Consortium
+ *  Copyright NumFOCUS
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -83,7 +83,7 @@ void
 FourierStripeArtifactImageFilter< TImage >
 ::DynamicThreadedGenerateData( const OutputRegionType & outputRegion )
 {
-  using FloatType = typename NumericTraits< typename ImageType::PixelType >::FloatType;
+  using FloatType = typename NumericTraits< typename ComplexImageType::PixelType >::ValueType;
   using GaussianOperatorType = GaussianOperator< FloatType, ImageDimension >;
 
   const unsigned int direction = this->GetDirection();
