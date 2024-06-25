@@ -1,7 +1,9 @@
 ITKRingArtifact
 ===============
 
-.. image:: https://github.com/InsightSoftwareConsortium/ITKRingArtifact/workflows/Build,%20test,%20package/badge.svg
+.. image:: https://github.com/InsightSoftwareConsortium/ITKRingArtifact/actions/workflows/build-test-package.yml/badge.svg
+    :target: https://github.com/InsightSoftwareConsortium/ITKRingArtifact/actions/workflows/build-test-package.yml
+    :alt: Build, test, package status
 
 .. image:: https://img.shields.io/pypi/v/itk-ringartifact.svg
     :target: https://pypi.python.org/pypi/itk-ringartifact
