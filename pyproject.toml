@@ -4,7 +4,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "itk-ringartifact"
-version = "2.0.0"
+version = "2.0.1"
 description = "ITK filters to reduce stripe artifacts or ring artifacts common in X-ray computed tomography, focused ion beam images, etc."
 readme = "README.rst"
 license = {file = "LICENSE"}
